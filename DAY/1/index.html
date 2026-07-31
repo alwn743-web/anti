@@ -453,33 +453,31 @@
                 opacity: 1;
                 transform: translate(-50%, -50%) scale(0.4) rotate(0deg);
             }
-        /* Kiss Lips Rain Shower Over Main Screen for '뽀뽀' */
-        .lip-rain-drop {
+        /* Kiss Eruption Burst Animation from Text for '뽀뽀' */
+        .kiss-burst-emoji {
             position: fixed !important;
-            top: -90px !important;
-            z-index: 99999999 !important;
             pointer-events: none !important;
-            font-size: var(--size, 4rem);
-            line-height: 1 !important;
-            filter: drop-shadow(0 8px 24px rgba(225, 29, 72, 0.65));
-            animation: lipRainFallAnim var(--duration, 2.8s) cubic-bezier(0.22, 0.61, 0.36, 1) forwards !important;
+            z-index: 99999999 !important;
+            font-size: var(--size, 2.5rem);
+            filter: drop-shadow(0 6px 18px rgba(244, 63, 94, 0.7));
+            animation: kissTextBurst 1.8s cubic-bezier(0.12, 0.8, 0.32, 1) forwards !important;
         }
 
-        @keyframes lipRainFallAnim {
+        @keyframes kissTextBurst {
             0% {
                 opacity: 0;
-                transform: translateY(0) translateX(0) rotate(var(--rot-start)) scale(0.6);
+                transform: translate(-50%, -50%) scale(0.2) rotate(0deg);
             }
-            12% {
+            15% {
                 opacity: 1;
-                transform: translateY(120px) translateX(var(--drift-mid)) rotate(var(--rot-mid)) scale(1.4);
+                transform: translate(-50%, -50%) scale(1.6) rotate(var(--rot-mid));
             }
-            80% {
-                opacity: 0.95;
+            70% {
+                opacity: 1;
             }
             100% {
                 opacity: 0;
-                transform: translateY(115vh) translateX(var(--drift-end)) rotate(var(--rot-end)) scale(0.85);
+                transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(0.4) rotate(var(--rot-end));
             }
         }
 
@@ -722,9 +720,9 @@
                 badgeText.textContent = currentQuote.badge;
                 quoteTitle.style.opacity = '1';
 
-                // '뽀뽀' (Step 2) 등장 시: 화면 전체에 입술 모양 이모티콘 💋 비처럼 내리는 효과
+                // '뽀뽀' (Step 2) 등장 시: '뽀뽀' 글자 중심에서 입술 이모티콘 💋 팡팡 뿜어져 나옴!
                 if (currentQuote.title === "뽀뽀" || currentIndex === 1) {
-                    triggerKissLipsRain();
+                    triggerKissLipsBurst();
                 }
 
                 // '구라임' 등장 시: 글씨 54px 확대 + 1.5초 뒤 💥 뻥 터지는 이모션
@@ -748,38 +746,43 @@
             }, 150);
         };
 
-        function triggerKissLipsRain() {
+        function triggerKissLipsBurst() {
+            const quoteTitle = document.getElementById('quoteTitle') || document.getElementById('mainCard');
+            if (!quoteTitle) return;
+
+            const rect = quoteTitle.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+
             const lipEmojis = ['💋', '👄', '💋', '💖', '💋', '😘', '💕', '💋'];
 
-            // 55개의 커다란 입술 이모티콘이 화면 중앙 글자 박스 위를 덮으며 시차를 두고 내려옴!
-            for (let i = 0; i < 55; i++) {
+            // 50개의 입술 이모티콘이 '뽀뽀' 글자 중심에서 360도로 팡팡 뿜어져 나옴!
+            for (let i = 0; i < 50; i++) {
                 const lip = document.createElement('div');
-                lip.className = 'lip-rain-drop';
+                lip.className = 'kiss-burst-emoji';
                 lip.textContent = lipEmojis[Math.floor(Math.random() * lipEmojis.length)];
 
-                const posX = Math.random() * 90 + 5; // 5vw ~ 95vw (화면 전체 덮음)
-                const size = Math.random() * 2.6 + 3.2; // 3.2rem ~ 5.8rem (큼직해서 글자를 물리적으로 가림!)
-                const delay = Math.random() * 1.8; // 0s ~ 1.8s 시차 분산
-                const duration = Math.random() * 1.0 + 2.4; // 2.4s ~ 3.4s
-                const rotStart = (Math.random() - 0.5) * 50;
-                const driftMid = (Math.random() - 0.5) * 80 + 'px';
-                const driftEnd = (Math.random() - 0.5) * 150 + 'px';
+                const size = Math.random() * 2.2 + 2.2; // 2.2rem ~ 4.4rem
+                const delay = Math.random() * 0.6; // 0s ~ 0.6s 시차 분산
+                const angle = Math.random() * Math.PI * 2;
+                const distance = Math.random() * 320 + 90; // 90px ~ 410px 뿜어져 나가는 거리
+                const tx = Math.cos(angle) * distance;
+                const ty = Math.sin(angle) * distance;
                 const rotMid = (Math.random() - 0.5) * 80 + 'deg';
-                const rotEnd = (Math.random() - 0.5) * 160 + 'deg';
+                const rotEnd = (Math.random() - 0.5) * 180 + 'deg';
 
-                lip.style.left = `${posX}vw`;
+                lip.style.left = `${centerX}px`;
+                lip.style.top = `${centerY}px`;
                 lip.style.animationDelay = `${delay}s`;
                 lip.style.setProperty('--size', `${size}rem`);
-                lip.style.setProperty('--duration', `${duration}s`);
-                lip.style.setProperty('--rot-start', `${rotStart}deg`);
-                lip.style.setProperty('--drift-mid', driftMid);
-                lip.style.setProperty('--drift-end', driftEnd);
+                lip.style.setProperty('--tx', `${tx}px`);
+                lip.style.setProperty('--ty', `${ty}px`);
                 lip.style.setProperty('--rot-mid', rotMid);
                 lip.style.setProperty('--rot-end', rotEnd);
 
                 document.body.appendChild(lip);
 
-                setTimeout(() => lip.remove(), (delay + duration + 0.5) * 1000);
+                setTimeout(() => lip.remove(), 2500);
             }
         }
 
