@@ -457,13 +457,31 @@
                 opacity: 1;
                 transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(1.8) rotate(180deg);
             }
-        /* Kiss Lips Rain Animation for '뽀뽀' (3 Seconds Rain Shower) */
+        /* Kiss Screen Overlay & Lips Rain Animation for '뽀뽀' */
+        .kiss-screen-overlay {
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle, rgba(251, 113, 133, 0.28) 0%, rgba(244, 63, 94, 0.15) 70%, transparent 100%);
+            z-index: 999990;
+            pointer-events: none;
+            opacity: 0;
+            animation: kissOverlayFade 3s ease-in-out forwards;
+        }
+
+        @keyframes kissOverlayFade {
+            0% { opacity: 0; }
+            20% { opacity: 1; }
+            80% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
         .falling-lips {
             position: fixed !important;
-            top: -60px !important;
-            z-index: 999999 !important;
+            top: -80px !important;
+            z-index: 9999999 !important;
             pointer-events: none !important;
-            animation: lipsRainFall 3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards !important;
+            filter: drop-shadow(0 6px 16px rgba(225, 29, 72, 0.5));
+            animation: lipsRainFall 3.2s cubic-bezier(0.22, 0.61, 0.36, 1) forwards !important;
         }
 
         @keyframes lipsRainFall {
@@ -473,14 +491,14 @@
             }
             15% {
                 opacity: 1;
-                transform: translateY(18vh) rotate(var(--rot-mid)) scale(1.3);
+                transform: translateY(15vh) rotate(var(--rot-mid)) scale(1.5);
             }
             80% {
-                opacity: 0.9;
+                opacity: 1;
             }
             100% {
                 opacity: 0;
-                transform: translateY(108vh) rotate(var(--rot-end)) scale(0.7);
+                transform: translateY(110vh) rotate(var(--rot-end)) scale(0.8);
             }
         }
 
@@ -749,9 +767,15 @@
         };
 
         function triggerLipsRainEffect() {
-            const lipEmojis = ['💋', '👄', '💋', '💖', '💋', '😘', '💕'];
-            
-            // 3초 동안 끊임없이 입술 이모티콘 소나기가 쏟아지는 제너레이터!
+            const lipEmojis = ['💋', '👄', '💋', '💖', '💋', '😘', '💕', '💋'];
+
+            // 메인화면 은은한 핑크 조명 글로우 커튼
+            const overlay = document.createElement('div');
+            overlay.className = 'kiss-screen-overlay';
+            document.body.appendChild(overlay);
+            setTimeout(() => overlay.remove(), 3200);
+
+            // 3초 동안 메인화면 전체 위를 커다란 입술 이모티콘 소나기가 대대적으로 뒤덮으며 지나가는 제너레이터!
             const startTime = Date.now();
             const rainInterval = setInterval(() => {
                 if (Date.now() - startTime > 3000) {
@@ -759,16 +783,16 @@
                     return;
                 }
 
-                for (let k = 0; k < 3; k++) {
+                for (let k = 0; k < 5; k++) {
                     const lip = document.createElement('div');
                     lip.className = 'falling-lips';
                     lip.textContent = lipEmojis[Math.floor(Math.random() * lipEmojis.length)];
 
-                    const startLeft = Math.random() * 94 + 3; // 3vw ~ 97vw
-                    const size = Math.random() * 1.5 + 1.8; // 1.8rem ~ 3.3rem
-                    const rotStart = (Math.random() - 0.5) * 50;
-                    const rotMid = (Math.random() - 0.5) * 80;
-                    const rotEnd = (Math.random() - 0.5) * 140;
+                    const startLeft = Math.random() * 92 + 4; // 4vw ~ 96vw
+                    const size = Math.random() * 2.5 + 2.5; // 2.5rem ~ 5.0rem (큼직하게 화면 전면을 뒤덮음!)
+                    const rotStart = (Math.random() - 0.5) * 60;
+                    const rotMid = (Math.random() - 0.5) * 90;
+                    const rotEnd = (Math.random() - 0.5) * 160;
 
                     lip.style.left = `${startLeft}vw`;
                     lip.style.fontSize = `${size}rem`;
@@ -778,9 +802,9 @@
 
                     document.body.appendChild(lip);
 
-                    setTimeout(() => lip.remove(), 3200);
+                    setTimeout(() => lip.remove(), 3400);
                 }
-            }, 120);
+            }, 90);
         }
 
         function triggerExplosionBurst() {
