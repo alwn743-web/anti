@@ -426,8 +426,13 @@
         }
 
         @keyframes guraimWobble {
-            0% { transform: scale(1.1) rotate(-3deg); }
-            100% { transform: scale(1.18) rotate(3deg); }
+            0% {
+                transform: scale(1.1) rotate(-3deg);
+            }
+
+            100% {
+                transform: scale(1.18) rotate(3deg);
+            }
         }
 
         .title.text-guraim-boom {
@@ -435,9 +440,23 @@
         }
 
         @keyframes guraimBoom {
-            0% { transform: scale(1.18); opacity: 1; filter: brightness(1); }
-            50% { transform: scale(2.4); opacity: 0.95; filter: brightness(2) drop-shadow(0 0 45px #ef4444); }
-            100% { transform: scale(0); opacity: 0; filter: blur(14px); }
+            0% {
+                transform: scale(1.18);
+                opacity: 1;
+                filter: brightness(1);
+            }
+
+            50% {
+                transform: scale(2.4);
+                opacity: 0.95;
+                filter: brightness(2) drop-shadow(0 0 45px #ef4444);
+            }
+
+            100% {
+                transform: scale(0);
+                opacity: 0;
+                filter: blur(14px);
+            }
         }
 
         .playful-burst-emoji {
@@ -454,13 +473,16 @@
                 opacity: 0;
                 transform: translate(-50%, -50%) scale(0.2) rotate(0deg);
             }
+
             18% {
                 opacity: 1;
                 transform: translate(-50%, -50%) scale(1.6) rotate(180deg);
             }
+
             75% {
                 opacity: 1;
             }
+
             100% {
                 opacity: 0;
                 transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(0.3) rotate(360deg);
@@ -503,8 +525,15 @@
         }
 
         @keyframes lipGridPulse {
-            0% { transform: scale(0.9) rotate(-4deg); opacity: 0.7; }
-            100% { transform: scale(1.1) rotate(4deg); opacity: 1; }
+            0% {
+                transform: scale(0.9) rotate(-4deg);
+                opacity: 0.7;
+            }
+
+            100% {
+                transform: scale(1.1) rotate(4deg);
+                opacity: 1;
+            }
         }
 
         /* Pastel Light Particle Effects */
