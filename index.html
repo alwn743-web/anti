@@ -453,10 +453,34 @@
                 opacity: 1;
                 transform: translate(-50%, -50%) scale(0.4) rotate(0deg);
             }
-            50% {
-                opacity: 1;
-                transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(1.8) rotate(180deg);
+        /* Kiss Lips Rain Shower for '뽀뽀' */
+        .lip-rain-drop {
+            position: fixed !important;
+            top: -70px !important;
+            z-index: 9999999 !important;
+            pointer-events: none !important;
+            font-size: var(--size, 3rem);
+            filter: drop-shadow(0 4px 12px rgba(236, 72, 153, 0.45));
+            animation: lipRainFallAnim var(--duration, 2.6s) linear forwards !important;
+        }
+
+        @keyframes lipRainFallAnim {
+            0% {
+                opacity: 0;
+                transform: translateY(0) translateX(0) rotate(0deg) scale(0.6);
             }
+            12% {
+                opacity: 1;
+                transform: translateY(12vh) translateX(var(--drift-mid)) rotate(var(--rot-mid)) scale(1.2);
+            }
+            85% {
+                opacity: 0.95;
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(108vh) translateX(var(--drift-end)) rotate(var(--rot-end)) scale(0.8);
+            }
+        }
 
 
         /* Pastel Light Particle Effects */
@@ -697,7 +721,10 @@
                 badgeText.textContent = currentQuote.badge;
                 quoteTitle.style.opacity = '1';
 
-
+                // '뽀뽀' (Step 2) 등장 시: 화면 전체에 입술 모양 이모티콘 💋 비처럼 내리는 효과
+                if (currentQuote.title === "뽀뽀" || currentIndex === 1) {
+                    triggerKissLipsRain();
+                }
 
                 // '구라임' 등장 시: 글씨 54px 확대 + 1.5초 뒤 💥 뻥 터지는 이모션
                 if (currentQuote.title === "구라임") {
@@ -719,6 +746,39 @@
                 }
             }, 150);
         };
+
+        function triggerKissLipsRain() {
+            const lipEmojis = ['💋', '👄', '💋', '💖', '💋', '😘', '💕', '💋'];
+
+            // 45개의 입술 이모티콘이 화면 전체(0vw~95vw)에서 시차를 두고 쏟아짐!
+            for (let i = 0; i < 45; i++) {
+                const lip = document.createElement('div');
+                lip.className = 'lip-rain-drop';
+                lip.textContent = lipEmojis[Math.floor(Math.random() * lipEmojis.length)];
+
+                const posX = Math.random() * 94 + 3; // 3vw ~ 97vw
+                const size = Math.random() * 2.2 + 2.0; // 2.0rem ~ 4.2rem
+                const delay = Math.random() * 1.6; // 0s ~ 1.6s 시차 분산
+                const duration = Math.random() * 1.0 + 2.2; // 2.2s ~ 3.2s
+                const driftMid = (Math.random() - 0.5) * 60 + 'px';
+                const driftEnd = (Math.random() - 0.5) * 120 + 'px';
+                const rotMid = (Math.random() - 0.5) * 60 + 'deg';
+                const rotEnd = (Math.random() - 0.5) * 140 + 'deg';
+
+                lip.style.left = `${posX}vw`;
+                lip.style.animationDelay = `${delay}s`;
+                lip.style.setProperty('--size', `${size}rem`);
+                lip.style.setProperty('--duration', `${duration}s`);
+                lip.style.setProperty('--drift-mid', driftMid);
+                lip.style.setProperty('--drift-end', driftEnd);
+                lip.style.setProperty('--rot-mid', rotMid);
+                lip.style.setProperty('--rot-end', rotEnd);
+
+                document.body.appendChild(lip);
+
+                setTimeout(() => lip.remove(), (delay + duration + 0.5) * 1000);
+            }
+        }
 
 
 
