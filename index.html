@@ -414,45 +414,7 @@
             transform: translateX(6px) scale(1.1);
         }
 
-        /* 2-Second Anticipation & Explosion Emotion for '구라임' */
-        .title.text-guraim {
-            font-size: 54px !important;
-            font-weight: 900 !important;
-            color: #ef4444 !important;
-            background: linear-gradient(135deg, #ef4444 0%, #dc2626 50%, #991b1b 100%) !important;
-            -webkit-background-clip: text !important;
-            -webkit-text-fill-color: transparent !important;
-            animation: guraimShake 0.25s infinite ease-in-out alternate;
-        }
 
-        @keyframes guraimShake {
-            0% { transform: scale(1.15) rotate(-3deg); }
-            100% { transform: scale(1.22) rotate(3deg); }
-        }
-
-        .title.text-exploded {
-            animation: guraimExplode 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards !important;
-        }
-
-        @keyframes guraimExplode {
-            0% { transform: scale(1.2); opacity: 1; filter: brightness(1); }
-            50% { transform: scale(2.2); opacity: 0.9; filter: brightness(2) drop-shadow(0 0 40px #ef4444); }
-            100% { transform: scale(0); opacity: 0; filter: blur(12px); }
-        }
-
-        .explode-emoji {
-            position: fixed;
-            pointer-events: none;
-            font-size: 2.5rem;
-            z-index: 9999;
-            animation: emojiBurst 0.9s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
-        }
-
-        @keyframes emojiBurst {
-            0% {
-                opacity: 1;
-                transform: translate(-50%, -50%) scale(0.4) rotate(0deg);
-            }
 
 
 
@@ -667,15 +629,10 @@
         ];
 
         let currentIndex = 0;
-        let explodeTimer = null;
 
         window.nextQuote = function (e) {
             if (e && e.stopPropagation) {
                 e.stopPropagation();
-            }
-            if (explodeTimer) {
-                clearTimeout(explodeTimer);
-                explodeTimer = null;
             }
 
             currentIndex = (currentIndex + 1) % quotes.length;
@@ -693,27 +650,6 @@
                 quoteTitle.textContent = currentQuote.title;
                 badgeText.textContent = currentQuote.badge;
                 quoteTitle.style.opacity = '1';
-
-
-
-                // '구라임' 등장 시: 글씨 54px 확대 + 1.5초 뒤 💥 뻥 터지는 이모션
-                if (currentQuote.title === "구라임") {
-                    quoteTitle.classList.add('text-guraim');
-
-                    explodeTimer = setTimeout(() => {
-                        quoteTitle.classList.remove('text-guraim');
-                        quoteTitle.classList.add('text-exploded');
-
-                        triggerExplosionBurst();
-
-                        // 0.8초 후 자동으로 다시 '은율아 사랑해' (Step 1)로 순환!
-                        setTimeout(() => {
-                            if (currentIndex === 3) {
-                                window.nextQuote();
-                            }
-                        }, 800);
-                    }, 1500);
-                }
             }, 150);
         };
 
