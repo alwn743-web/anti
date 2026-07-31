@@ -457,50 +457,7 @@
                 opacity: 1;
                 transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(1.8) rotate(180deg);
             }
-        /* Kiss Screen Overlay & Lips Rain Animation for '뽀뽀' */
-        .kiss-screen-overlay {
-            position: fixed;
-            inset: 0;
-            background: radial-gradient(circle, rgba(251, 113, 133, 0.28) 0%, rgba(244, 63, 94, 0.15) 70%, transparent 100%);
-            z-index: 999990;
-            pointer-events: none;
-            opacity: 0;
-            animation: kissOverlayFade 3s ease-in-out forwards;
-        }
 
-        @keyframes kissOverlayFade {
-            0% { opacity: 0; }
-            20% { opacity: 1; }
-            80% { opacity: 1; }
-            100% { opacity: 0; }
-        }
-
-        .falling-lips {
-            position: fixed !important;
-            top: -80px !important;
-            z-index: 9999999 !important;
-            pointer-events: none !important;
-            filter: drop-shadow(0 6px 16px rgba(225, 29, 72, 0.5));
-            animation: lipsRainFall 3.2s cubic-bezier(0.22, 0.61, 0.36, 1) forwards !important;
-        }
-
-        @keyframes lipsRainFall {
-            0% {
-                opacity: 0;
-                transform: translateY(0) rotate(var(--rot-start)) scale(0.6);
-            }
-            15% {
-                opacity: 1;
-                transform: translateY(15vh) rotate(var(--rot-mid)) scale(1.5);
-            }
-            80% {
-                opacity: 1;
-            }
-            100% {
-                opacity: 0;
-                transform: translateY(110vh) rotate(var(--rot-end)) scale(0.8);
-            }
-        }
 
         /* Pastel Light Particle Effects */
         .particle {
@@ -740,10 +697,7 @@
                 badgeText.textContent = currentQuote.badge;
                 quoteTitle.style.opacity = '1';
 
-                // '뽀뽀' (Step 2) 등장 시: 입술 모양 이모티콘 💋 3초 동안 하늘에서 내려오는 효과
-                if (currentQuote.title.indexOf("뽀뽀") !== -1 || currentQuote.badge === "Step 2") {
-                    triggerLipsRainEffect();
-                }
+
 
                 // '구라임' 등장 시: 글씨 54px 확대 + 1.5초 뒤 💥 뻥 터지는 이모션
                 if (currentQuote.title === "구라임") {
@@ -766,46 +720,7 @@
             }, 150);
         };
 
-        function triggerLipsRainEffect() {
-            const lipEmojis = ['💋', '👄', '💋', '💖', '💋', '😘', '💕', '💋'];
 
-            // 메인화면 은은한 핑크 조명 글로우 커튼
-            const overlay = document.createElement('div');
-            overlay.className = 'kiss-screen-overlay';
-            document.body.appendChild(overlay);
-            setTimeout(() => overlay.remove(), 3200);
-
-            // 3초 동안 메인화면 전체 위를 커다란 입술 이모티콘 소나기가 대대적으로 뒤덮으며 지나가는 제너레이터!
-            const startTime = Date.now();
-            const rainInterval = setInterval(() => {
-                if (Date.now() - startTime > 3000) {
-                    clearInterval(rainInterval);
-                    return;
-                }
-
-                for (let k = 0; k < 5; k++) {
-                    const lip = document.createElement('div');
-                    lip.className = 'falling-lips';
-                    lip.textContent = lipEmojis[Math.floor(Math.random() * lipEmojis.length)];
-
-                    const startLeft = Math.random() * 92 + 4; // 4vw ~ 96vw
-                    const size = Math.random() * 2.5 + 2.5; // 2.5rem ~ 5.0rem (큼직하게 화면 전면을 뒤덮음!)
-                    const rotStart = (Math.random() - 0.5) * 60;
-                    const rotMid = (Math.random() - 0.5) * 90;
-                    const rotEnd = (Math.random() - 0.5) * 160;
-
-                    lip.style.left = `${startLeft}vw`;
-                    lip.style.fontSize = `${size}rem`;
-                    lip.style.setProperty('--rot-start', `${rotStart}deg`);
-                    lip.style.setProperty('--rot-mid', `${rotMid}deg`);
-                    lip.style.setProperty('--rot-end', `${rotEnd}deg`);
-
-                    document.body.appendChild(lip);
-
-                    setTimeout(() => lip.remove(), 3400);
-                }
-            }, 90);
-        }
 
         function triggerExplosionBurst() {
             const mainCard = document.getElementById('mainCard');
