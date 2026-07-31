@@ -453,33 +453,7 @@
                 opacity: 1;
                 transform: translate(-50%, -50%) scale(0.4) rotate(0deg);
             }
-        /* Kiss Eruption Burst Animation from Text for '뽀뽀' */
-        .kiss-burst-emoji {
-            position: fixed !important;
-            pointer-events: none !important;
-            z-index: 99999999 !important;
-            font-size: var(--size, 2.5rem);
-            filter: drop-shadow(0 6px 18px rgba(244, 63, 94, 0.7));
-            animation: kissTextBurst 1.8s cubic-bezier(0.12, 0.8, 0.32, 1) forwards !important;
-        }
 
-        @keyframes kissTextBurst {
-            0% {
-                opacity: 0;
-                transform: translate(-50%, -50%) scale(0.2) rotate(0deg);
-            }
-            15% {
-                opacity: 1;
-                transform: translate(-50%, -50%) scale(1.6) rotate(var(--rot-mid));
-            }
-            70% {
-                opacity: 1;
-            }
-            100% {
-                opacity: 0;
-                transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(0.4) rotate(var(--rot-end));
-            }
-        }
 
 
         /* Pastel Light Particle Effects */
@@ -720,10 +694,7 @@
                 badgeText.textContent = currentQuote.badge;
                 quoteTitle.style.opacity = '1';
 
-                // '뽀뽀' (Step 2) 등장 시: '뽀뽀' 글자 중심에서 입술 이모티콘 💋 팡팡 뿜어져 나옴!
-                if (currentQuote.title === "뽀뽀" || currentIndex === 1) {
-                    triggerKissLipsBurst();
-                }
+
 
                 // '구라임' 등장 시: 글씨 54px 확대 + 1.5초 뒤 💥 뻥 터지는 이모션
                 if (currentQuote.title === "구라임") {
@@ -746,45 +717,7 @@
             }, 150);
         };
 
-        function triggerKissLipsBurst() {
-            const quoteTitle = document.getElementById('quoteTitle') || document.getElementById('mainCard');
-            if (!quoteTitle) return;
 
-            const rect = quoteTitle.getBoundingClientRect();
-            const centerX = rect.left + rect.width / 2;
-            const centerY = rect.top + rect.height / 2;
-
-            const lipEmojis = ['💋', '👄', '💋', '💖', '💋', '😘', '💕', '💋'];
-
-            // 50개의 입술 이모티콘이 '뽀뽀' 글자 중심에서 360도로 팡팡 뿜어져 나옴!
-            for (let i = 0; i < 50; i++) {
-                const lip = document.createElement('div');
-                lip.className = 'kiss-burst-emoji';
-                lip.textContent = lipEmojis[Math.floor(Math.random() * lipEmojis.length)];
-
-                const size = Math.random() * 2.2 + 2.2; // 2.2rem ~ 4.4rem
-                const delay = Math.random() * 0.6; // 0s ~ 0.6s 시차 분산
-                const angle = Math.random() * Math.PI * 2;
-                const distance = Math.random() * 320 + 90; // 90px ~ 410px 뿜어져 나가는 거리
-                const tx = Math.cos(angle) * distance;
-                const ty = Math.sin(angle) * distance;
-                const rotMid = (Math.random() - 0.5) * 80 + 'deg';
-                const rotEnd = (Math.random() - 0.5) * 180 + 'deg';
-
-                lip.style.left = `${centerX}px`;
-                lip.style.top = `${centerY}px`;
-                lip.style.animationDelay = `${delay}s`;
-                lip.style.setProperty('--size', `${size}rem`);
-                lip.style.setProperty('--tx', `${tx}px`);
-                lip.style.setProperty('--ty', `${ty}px`);
-                lip.style.setProperty('--rot-mid', rotMid);
-                lip.style.setProperty('--rot-end', rotEnd);
-
-                document.body.appendChild(lip);
-
-                setTimeout(() => lip.remove(), 2500);
-            }
-        }
 
 
 
